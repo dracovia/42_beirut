@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_boolean.h                                       :+:      :+:    :+:   */
+/*   ft_putstr_non_printable.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/28 19:18:09 by mfassad           #+#    #+#             */
-/*   Updated: 2025/04/30 19:42:24 by mfassad          ###   ########.fr       */
+/*   Created: 2025/04/14 17:34:35 by mfassad           #+#    #+#             */
+/*   Updated: 2025/04/15 20:11:15 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_BOOLEAN_H
-# define FT_BOOLEAN_H
+#include <unistd.h>
 
-# include <unistd.h>
+void	ft_putstr_non_printable(char *str)
+{
+	int		i;
+	char	*hex;
+	char	c;
 
-# define     TRUE    1
-# define     FALSE   0
-
-# define     EVEN(nbr)  ((nbr) % 2 == 0)
-# define     SUCCESS 0
-# define     EVEN_MSG "I have an even number of arguments.\n"
-# define     ODD_MSG "I have an odd number of arguments.\n"
-
-typedef int	t_bool;
-
-#endif
+	i = 0;
+	hex = "0123456789abcdef";
+	while (str[i] != '\0')
+	{
+		if (!(str[i] >= 32 && str[i] <= 126))
+		{
+			write(1, "\\", 1);
+			c = hex[(unsigned char )str[i] / 16];
+			write(1, &c, 1);
+			c = hex[(unsigned char )str[i] % 16];
+			write(1, &c, 1);
+		}
+		else
+		{
+			write(1, &str[i], 1);
+		}
+		i++;
+	}
+}

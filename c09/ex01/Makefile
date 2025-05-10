@@ -1,31 +1,26 @@
-NAME = libft.a
+NAME=libft.a
 
-SRC_DIR = srcs
-INCLUDES = includes
+SRCS=srcs/ft_putchar.c srcs/ft_swap.c srcs/ft_putstr.c srcs/ft_strlen.c srcs/ft_strcmp.c
+OBJS=${SRCS:.c=.o}
+HEADERS_FOLDER=./includes
+CC=cc
+CFLAGS=-Wall -Wextra -Werror
 
-SRC =  $(SRC_DIR)/ft_putchar.c $(SRC_DIR)/ft_swap.c $(SRC_DIR)/ft_putstr.c $(SRC_DIR)/ft_strlen.c $(SRC_DIR)/ft_strcmp.c
-OBJ = $(SRC: .c = .o)
+.c.o:
+	${CC} ${CFLAGS} -I${HEADERS_FOLDER} -c $< -o ${<:.c=.o}
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+all: ${NAME}
 
-AR = ar rc
-RANLIB = ranlib
-RM = rm -f
+${NAME}: ${OBJS}
+	ar rc ${NAME} ${OBJS}
+	ranlib ${NAME}
 
-all : $(NAME)
+clean:
+	rm -f ${OBJS}
 
-$(NAME) : $(OBJ)
-	$(AR) $(NAME) $(OBJ)
-	$(RANLIB) $(NAME)
+fclean: clean
+	rm -f ${NAME}
 
-%.o: %.c
-	$(cc) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
+re: fclean all
 
-clean: 
-	$(RM) $(OBJ)
-	
-fclean: clean 
-	$(RM) $(name)
-	
-re : fclean all
+.PHONY: all clean fclean re

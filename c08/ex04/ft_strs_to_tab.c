@@ -6,12 +6,13 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:19:26 by mfassad           #+#    #+#             */
-/*   Updated: 2025/04/30 18:06:53 by mfassad          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:23:47 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "ft_stock_str.h"
 
 int	ft_strlen(char *str)
 {

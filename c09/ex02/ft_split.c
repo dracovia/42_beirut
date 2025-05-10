@@ -6,107 +6,105 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 19:56:39 by mfassad           #+#    #+#             */
-/*   Updated: 2025/05/01 13:17:10 by mfassad          ###   ########.fr       */
+/*   Updated: 2025/05/01 13:43:04 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <stdio.h>
 
-int	in_charset(char c, char *charset)
+int	isinstring(char c, char *st)
 {
 	int	i;
 
 	i = 0;
-	while (charset[i])
+	if (!st)
+		return (0);
+	while (st[i])
 	{
-		if (charset[i] == c)
+		if (c == st[i])
 			return (1);
 		i++;
 	}
-	return (0);/* code */
+	return (0);
 }
 
-int	count_word(char *str, char *charset)
+int	countwords(char *st, char *charset)
 {
 	int	i;
-	int	count;
+	int	counter;
 
+	counter = 0;
 	i = 0;
-	count = 0;
-	while (str[i])
+	if (!st || !st[0])
+		return (0);
+	while (st[i])
 	{
-		while (str[i] && in_charset(str[i], charset))
-			i++;
-		if (str[i])
-		{
-			count++;
-			while (str[i] && !in_charset(str[i], charset))
-				i++;
-		}
-	}
-	return (count);
-}
-
-char	*ft_strdup(char *start, char *end)
-{
-	char	*res;
-	int		i;
-	int		size;
-
-	size = end - start;
-	res = (char *) malloc (size +1);
-	i = 0;
-	while (i < size)
-	{
-		res[i] = start[i];
+		if (!isinstring(st[i], charset)
+			&& (isinstring(st[i + 1], charset) || st[i + 1] == '\0'))
+			counter++;
 		i++;
 	}
-	res[i] = '\0';
-	return (res);
+	return (counter);
+}
+
+char	*cutstring(char *string, int pre, int cur)
+{
+	int		i;
+	char	*new;
+
+	if (cur <= pre)
+		return (NULL);
+	new = malloc(cur - pre + 1);
+	if (!new)
+		return (NULL);
+	i = 0;
+	while (pre < cur)
+		new[i++] = string[pre++];
+	new[i] = '\0';
+	return (new);
+}
+
+char	**savewords(char *st, char *charset, char **r, int word_count)
+{
+	int	counter;
+	int	pre;
+	int	cur;
+
+	pre = 0;
+	cur = 0;
+	counter = 0;
+	if (!st || !charset)
+		return (NULL);
+	while (st[cur] && counter < word_count)
+	{
+		while (st[cur] && isinstring(st[cur], charset))
+			cur++;
+		pre = cur;
+		while (st[cur] && !isinstring(st[cur], charset))
+			cur++;
+		if (cur > pre)
+		{
+			r[counter] = cutstring(st, pre, cur);
+			if (!r[counter])
+				return (NULL);
+			counter++;
+		}
+	}
+	return (r);
 }
 
 char	**ft_split(char *str, char *charset)
 {
-	int		i;
-	int		words;
-	char	**strs;
-	char	*start;
-	int		k;
+	char	**r;
+	int		word_count;
 
-	words = count_word(str, charset);
-	strs = (char **)malloc(sizeof (char *) * (words + 1));
-	i = 0;
-	k = 0;
-	while (str[i])
-	{
-		while (str[i] && in_charset(str[i], charset))
-			i++;
-		if (str[i])
-		{
-			start = &str[i];
-			while (str[i] && !in_charset(str[i], charset))
-				i++;
-			strs[k++] = ft_strdup(start, &str[i]);
-		}
-	}
-	strs[k++] = 0;
-	return (strs);
-}
-
-int main(int argc, char** argv)
-{
-	char ** r = ft_split(argv[1] , " ");
-	int i = 0; 
-	if(argc > 1)
-	{
-		while (i < 5)
-		{
-			printf("%s\n",r[i]);
-			i++;
-		}
-		
-	}
-	
-	return (0);
+	if (!str || !charset)
+		return (NULL);
+	word_count = countwords(str, charset);
+	r = malloc(sizeof(char *) * (word_count + 1));
+	if (!r)
+		return (NULL);
+	r[word_count] = NULL;
+	savewords(str, charset, r, word_count);
+	return (r);
 }

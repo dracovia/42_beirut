@@ -6,12 +6,13 @@
 /*   By: mfassad <mfassad@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:04:45 by mfassad           #+#    #+#             */
-/*   Updated: 2025/04/30 18:09:32 by mfassad          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:23:58 by mfassad          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
+#include "ft_stock_str.h"
 
 void	ft_putnum(int n)
 {
